@@ -1,0 +1,79 @@
+https://archive.ics.uci.edu/dataset/186/wine+quality
+
+idea:
+
+unsupervised as supervised.
+
+cluster: (data_point) => (cluster)
+label: (cluster) => (label)
+
+need to select best label function (greedily)
+match (cluster_freq, label_freq) ordered by descending freq.
+### DOES NOT WORK ###
+
+[ 1, 1, 1, 2, 2 ]
+[ 1, 1, 1, 2, 2 ]
+
+
+1. split into train/test data
+2. model.train(train_data)
+2. model.predict(test_data)
+
+import heapq
+
+# ### Define the WineQualityClustering Class
+class WineQualityClustering:
+    def __init__(self, n_clusters, features, target):
+        self.features = features
+        self.target = target
+        self.model = KMeans(n_clusters=n_clusters, random_state=42)
+        self.mapping = {}
+
+    def fit(self, df):
+        """ Fit the clustering model. """
+        clusters = pd.Series( self.model.fit_predict(df[self.features]) )
+        """ Assign Mapping (Cluster) => (Quality) using Greedy Algorithm """
+        self.mapping = {}
+        cluster_counts = sorted( list( clusters.value_counts().items() ), key=lambda x: -x[1] )
+        target_counts = sorted( list( df[self.target].value_counts().items() ), key=lambda x: -x[1] )
+        # print(cluster_counts)
+        # print(target_counts)
+        # print( sum( x[1] for x in cluster_counts ), sum( x[1] for x in target_counts ) )
+        pq = [ (-count, value) for (value, count) in target_counts ]
+
+        for i in range(0, len(cluster_counts)):
+            neg_count, tgt_val = heapq.heappop(pq)
+            cluster, ccount = cluster_counts[i]
+            self.mapping[cluster] = tgt_val
+            if ccount >= -neg_count:
+                continue
+            # -neg_count > ccount
+            heapq.heappush( pq, ( neg_count + ccount, tgt_val ) )
+
+        """ Return Mapped Data """
+        print( sorted( list( clusters.map(self.mapping).value_counts().items() ), key=lambda x: -x[1] ) )
+        print( sorted( list( df[self.target].value_counts().items() ), key=lambda x: -x[1] ) )
+        return clusters.map(self.mapping)
+
+    def predict(self, df):
+        clusters = pd.Series( self.model.predict(df[self.features]) )
+        return clusters.map(self.mapping)
+
+    def evaluate(self, df):
+        """ Evaluate the clustering performance using confusion matrix and classification report. """
+        y_true = df[self.target]
+        y_pred = self.predict(df)
+
+        print("Confusion Matrix:")
+        conf_matrix = confusion_matrix(y_true, y_pred)
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=np.unique(y_true),
+                    yticklabels=np.unique(y_true))
+        plt.title('Confusion Matrix')
+        plt.xlabel('Predicted Quality')
+        plt.ylabel('Actual Quality')
+        plt.show()
+
+        print("\nClassification Report:")
+        print(classification_report(y_true, y_pred))
