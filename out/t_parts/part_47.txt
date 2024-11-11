@@ -1,0 +1,15 @@
+
+The evaluation results for the Linear Regression model are as follows:
+
+    Accuracy: 53.26%
+    Mean Absolute Error (MAE): 0.5201
+    Percentage Error: 8.98%
+
+When compared to K-Means clustering, Linear Regression performs slightly better in terms of both accuracy and MAE, indicating that it’s a more effective model for predicting continuous wine quality scores.
+
+
+Let’s now summarize the results of our comparison.
+
+    K-Means Clustering (with 100 clusters) achieved an accuracy of 52.32% and an MAE of 0.5426.
+    Linear Regression outperformed K-Means with an accuracy of 53.26% and an MAE of 0.5201.
+

@@ -1,0 +1,5 @@
+
+
+
+With the data cleaned and explored, we now move on to the clustering analysis. Clustering is an unsupervised learning method that allows us to group wines based on their characteristics.
+

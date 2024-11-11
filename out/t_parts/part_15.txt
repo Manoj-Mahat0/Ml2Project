@@ -1,0 +1,4 @@
+
+
+To prepare for clustering, we split the data into training and testing sets. We also apply Standard Scaling to normalize the features, ensuring that each feature contributes equally to the clustering models. This step is essential because the clustering algorithms, like K-Means, are sensitive to the scale of the features.
+

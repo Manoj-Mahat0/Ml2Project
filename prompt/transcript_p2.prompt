@@ -1,0 +1,344 @@
+write a transcript for a video presentation of the following jupyter notebook
+
+the resulting document must have the format:
+
+*text_segment 1 for presenter
+
+[Pause for x_1 seconds]
+
+...
+
+*text_segment n for presenter
+
+[Pause for x_n seconds]
+
+The content of the notebook is below.
+Be thorough in discussing the content.
+
+
+Clustering Evaluation and Model Comparison
+
+This code defines three functions for evaluating clustering models:
+
+    compute_cluster_options: Calculates the most frequent true labels for each cluster.
+    label_permute_compare: Finds the best mapping between predicted clusters and true labels, and computes the accuracy of this mapping.
+    evaluate_model: Evaluates the model's performance using accuracy, Mean Absolute Error (MAE), and percentage error, and displays a confusion matrix.
+
+These functions help assess how well clustering algorithms predict wine quality by comparing predicted labels to true wine quality labels.
+
+# ### Define the WineQualityClustering Class
+
+class WineQualityClustering:
+
+    def __init__(self, n_clusters, features, target,
+
+            metric='euclidean', linkage='ward'):
+
+        self.features = features
+
+        self.target = target
+
+        # self.model = AgglomerativeClustering(n_clusters=n_clusters, affinity=metric, linkage=linkage)
+
+        self.model = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
+
+        self.mapping = {}
+
+​
+
+    def fit(self, df):
+
+        """ Fit the clustering model. """
+
+        df['cluster'] = self.model.fit_predict( df[self.features])
+
+        # print(df['cluster'].isna().sum())
+
+​
+
+        cluster_options = compute_cluster_options(df, 'cluster', self.target)
+
+        # print(cluster_options)
+
+​
+
+        best_mapping, best_accuracy = label_permute_compare(df[self.target], df['cluster'], cluster_options)
+
+        self.mapping = best_mapping
+
+        # print(best_accuracy)
+
+​
+
+        return df['cluster'].map(self.mapping)
+
+​
+
+    def predict(self, df):
+
+        clusters = pd.Series( self.model.predict( df[self.features] ) )
+
+        return clusters.map(self.mapping)
+
+​
+
+    def evaluate(self, df):
+
+        """ Evaluate the clustering performance using confusion matrix and classification report. """
+
+        y_true = df[self.target]
+
+        y_pred = self.predict(df)
+
+        return evaluate_model(y_true, y_pred, display=False)
+
+WineQualityClustering Class
+
+This class performs wine quality clustering using K-Means:
+
+    __init__: Initializes the clustering model with the number of clusters, features, and target variable.
+    fit: Trains the clustering model, assigns clusters, and maps clusters to the most frequent wine quality labels.
+    predict: Predicts the cluster for new data.
+    evaluate: Evaluates the clustering model's performance using accuracy and a confusion matrix.
+
+# Do sample execution on 100 clusters
+
+n_clusters = 100
+
+w = WineQualityClustering(n_clusters, FEATURES, TARGET_VARIABLE)
+
+​
+
+# Fit model
+
+w.fit(X_train)
+
+​
+
+# Evaluate model
+
+_ = evaluate_model(X_test[TARGET_VARIABLE], w.predict(X_test), model_name=f'K-Means, n_clusters = {n_clusters}')
+
+Evaluation Results for: K-Means, n_clusters = 100
+Accuracy: 0.5232
+Mean Absolute Error: 0.5426
+Percentage Error: 9.37%
+
+# Initialize lists to hold results
+
+train_accuracy_results = []
+
+train_mae_results = []
+
+test_accuracy_results = []
+
+test_mae_results = []
+
+​
+
+# cluster_range = range(10, 200 + 1, 10)
+
+cluster_range = range(100, 500 + 1, 50)
+
+​
+
+# Loop over the range of clusters, fit the model, and evaluate
+
+for n_clusters in cluster_range:
+
+    # Initialize the WineQualityClustering model
+
+    w = WineQualityClustering(n_clusters, FEATURES, TARGET_VARIABLE)
+
+
+
+    # Fit the model on the training data
+
+    w.fit(X_train)
+
+​
+
+    # Evaluate on the training set
+
+    train_eval_res = w.evaluate(X_train)
+
+    train_accuracy_results.append(train_eval_res["accuracy"])
+
+    train_mae_results.append(train_eval_res["mae"])
+
+
+
+    # Evaluate on the test set
+
+    test_eval_res = w.evaluate(X_test)
+
+    test_accuracy_results.append(test_eval_res["accuracy"])
+
+    test_mae_results.append(test_eval_res["mae"])
+
+​
+
+# Plot the results
+
+plt.figure(figsize=(12, 6))
+
+​
+
+# Plot Accuracy vs. Number of Clusters (for both train and test sets)
+
+plt.subplot(1, 2, 1)
+
+plt.plot(cluster_range, train_accuracy_results, marker='o', label='Train Accuracy', color='blue')
+
+plt.plot(cluster_range, test_accuracy_results, marker='o', label='Test Accuracy', color='green')
+
+plt.title('Accuracy vs. Number of Clusters')
+
+plt.xlabel('Number of Clusters')
+
+plt.ylabel('Accuracy')
+
+plt.legend()
+
+plt.xticks(cluster_range)
+
+plt.grid()
+
+​
+
+# Plot MAE vs. Number of Clusters (for both train and test sets)
+
+plt.subplot(1, 2, 2)
+
+plt.plot(cluster_range, train_mae_results, marker='o', label='Train MAE', color='blue')
+
+plt.plot(cluster_range, test_mae_results, marker='o', label='Test MAE', color='orange')
+
+plt.title('MAE vs. Number of Clusters')
+
+plt.xlabel('Number of Clusters')
+
+plt.ylabel('Mean Absolute Error')
+
+plt.legend()
+
+plt.xticks(cluster_range)
+
+plt.grid()
+
+​
+
+plt.tight_layout()
+
+plt.show()
+
+​
+
+Cluster Evaluation
+
+This code evaluates the performance of the WineQualityClustering model for different numbers of clusters:
+
+    It loops over a range of cluster values (100 to 500, with a step size of 50) and fits the model on the training data (X_train).
+    For each number of clusters, the model's accuracy and mean absolute error (MAE) are calculated for both the training dataset (X_train) and the test dataset (X_test).
+    Four key metrics are evaluated for each cluster count:
+        Train Accuracy: Measures the model's accuracy on the training data.
+        Train MAE: Measures the model's Mean Absolute Error on the training data.
+        Test Accuracy: Measures the model's accuracy on the test data.
+        Test MAE: Measures the model's Mean Absolute Error on the test data.
+
+Two plots are generated to visualize the results:
+
+    Accuracy vs. Number of Clusters: Shows how the accuracy changes with the number of clusters for both the training and test sets.
+    MAE vs. Number of Clusters: Displays the relationship between the Mean Absolute Error and the number of clusters for both the training and test sets.
+
+Observation: As expected, model accuracy and MAE improve on training data as number of clusters increases. However, the accuracy on the test data set does not significantly improve as the number of clusters increases. This indicates that adding more clusters may not improve the model's performance on the test data.
+
+# ### Linear Regression Approach
+
+# We will also try to predict quality using Linear Regression as a comparison.
+
+​
+
+# Initialize and fit the Linear Regression model
+
+lr_model = LinearRegression()
+
+lr_model.fit(X_train[FEATURES], X_train[TARGET_VARIABLE])
+
+​
+
+# Make predictions
+
+y_test_lr = X_test[TARGET_VARIABLE]
+
+y_pred_lr = np.round(
+
+    lr_model.predict(X_test[FEATURES])
+
+).astype(int)  # Round predictions to nearest integer quality score
+
+​
+
+# Evaluate Linear Regression model
+
+# Evaluate model
+
+_ = evaluate_model(y_test_lr, y_pred_lr, model_name=f'Linear Regression')
+
+​
+
+Evaluation Results for: Linear Regression
+Accuracy: 0.5326
+Mean Absolute Error: 0.5201
+Percentage Error: 8.98%
+
+Linear Regression vs K-Means Clustering
+
+This section compares the performance of Linear Regression and K-Means Clustering for predicting wine quality.
+
+    Linear Regression:
+        Accuracy: 53.26%
+        Mean Absolute Error (MAE): 0.5201
+        Percentage Error: 8.98%
+
+    K-Means Clustering (n_clusters = 100):
+        Accuracy: 52.32%
+        Mean Absolute Error (MAE): 0.5426
+        Percentage Error: 9.37%
+
+Observation: Linear Regression outperforms K-Means clustering in terms of accuracy and lower mean absolute error, indicating it is a better approach for predicting wine quality in this case.
+
+# ### Save the Model if Needed (Optional)
+
+# joblib.dump(wine_cluster_model, 'wine_quality_clustering_model.pkl')
+
+# joblib.dump(lr_model, 'wine_quality_linear_regression_model.pkl')
+
+Conclusion
+
+In this experiment, we evaluated two approaches—K-Means Clustering and Linear Regression—for predicting wine quality.
+
+    K-Means Clustering: Despite being an unsupervised learning technique, K-Means struggled to provide a meaningful prediction of wine quality. The performance did not significantly improve as the number of clusters increased, with an accuracy of 52.32% and an MAE of 0.5426. Clustering is less effective in this context because wine quality is a continuous variable, making it challenging to map clusters directly to the quality labels.
+
+    Linear Regression: Linear Regression outperformed K-Means with an accuracy of 53.26% and a lower Mean Absolute Error (MAE) of 0.5201. As a supervised learning method, it directly models the relationship between the features and the target variable, providing better results for predicting continuous values like wine quality.
+
+Data Preprocessing
+
+The dataset was relatively clean, with no missing values and no significant outliers. We performed standard scaling of features to ensure they were on a similar scale, which is particularly important for both clustering and regression models. Data preprocessing steps such as scaling and removing duplicates ensured that the models received high-quality inputs for training.
+
+However, further improvements in data preprocessing could involve:
+
+    Feature Engineering: Exploring additional feature creation, such as interaction terms or domain-specific transformations, might help improve model performance.
+    Handling Imbalanced Classes: The target variable (wine quality) appeared to have a normal distribution, and very low number of samples of low quality and high quality wines.
+
+Further Work
+
+To enhance the predictive performance of the models, future work could include:
+
+    Exploring Other Models: For this dataset a deep neural network would be a good place to start to consider complex interactions.
+    Adding Features: For this dataset, perhaps there are additional attributes of wine which could help predict its quality.
+    Hyperparameter Tuning: For both the K-Means and Linear Regression models, further optimization (e.g., tuning the number of clusters for K-Means or number of iterations) could lead to improved accuracy.
+
+In summary, the low performance of K-Means Clustering implies that similar feature vectors maybe mapped to multiple quality scores. This could possibly indicate that the quality ratings may depend on the person(s) determining the quality ratings. Moreover, if the given dataset was a complete parametric description of wine, then we can confirm the prior statement.
+
+​

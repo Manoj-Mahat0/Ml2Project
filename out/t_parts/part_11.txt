@@ -1,0 +1,4 @@
+
+
+Another interesting point is that the dataset contains both red and white wines, and we can see the count of each type using a bar chart. As we can see from the plot, there are considerably more white wine samples compared to red wines.
+

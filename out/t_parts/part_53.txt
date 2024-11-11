@@ -1,0 +1,6 @@
+
+We could also try adding more features to the dataset, such as factors related to the wine’s region or vintage year, which could improve model performance. Finally, hyperparameter tuning for both the K-Means and Linear Regression models could lead to better results.
+
+
+To conclude, our experiment has shown that Linear Regression is more effective than K-Means Clustering for predicting wine quality, given that wine quality is a continuous variable. Although K-Means is a popular unsupervised learning technique, it doesn’t perform as well in this context, where we need to predict a continuous score.
+

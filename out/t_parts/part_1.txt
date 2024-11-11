@@ -1,0 +1,2 @@
+Welcome to this presentation on wine quality prediction and clustering analysis. The aim of this project is to analyze and predict the quality of wines using several physicochemical properties. We will be working with a dataset containing both red and white wines, featuring attributes such as acidity, alcohol content, sugar levels, pH, and more. The primary objective is to predict wine quality and identify patterns through clustering techniques.
+

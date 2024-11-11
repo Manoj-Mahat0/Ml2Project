@@ -1,0 +1,12 @@
+
+Here are the evaluation results for K-Means with 100 clusters:
+
+    Accuracy: 52.32%
+    Mean Absolute Error (MAE): 0.5426
+    Percentage Error: 9.37%
+
+These results show that the model’s accuracy and MAE are reasonable, but there's still room for improvement. The evaluation metrics give us insight into how well the predicted clusters match the actual quality labels.
+
+
+Next, we explore how the number of clusters impacts the model's performance. To do this, we loop over a range of cluster sizes, from 100 to 500, and evaluate the model for each number of clusters.
+

@@ -1,0 +1,19 @@
+
+
+
+Let's take a closer look at the dataset itself. The dataset consists of several features related to the wine’s physicochemical properties. These include:
+
+    Fixed acidity
+    Volatile acidity
+    Citric acid
+    Residual sugar
+    Chlorides
+    Free sulfur dioxide
+    Total sulfur dioxide
+    Density
+    pH
+    Sulphates
+    Alcohol
+
+Additionally, there is a target variable called quality, which is an integer representing the wine quality score ranging from 3 to 9.
+

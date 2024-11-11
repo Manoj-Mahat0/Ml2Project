@@ -1,0 +1,4 @@
+
+
+We’ll train the regression model on the same features used in clustering, and then assess its performance using metrics such as mean absolute error and accuracy. The goal here is to understand how well our model can predict wine quality based on the physicochemical attributes of each sample.
+

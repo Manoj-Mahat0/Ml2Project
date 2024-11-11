@@ -1,0 +1,82 @@
+------------------------- DATASET DESCRIPTION -------------------------
+
+
+
+Two datasets are included, related to red and white vinho verde wine samples, from the north of Portugal. The goal is to model wine quality based on physicochemical tests (see [Cortez et al., 2009], http://www3.dsi.uminho.pt/pcortez/wine/).
+Dataset Characteristics
+
+Multivariate
+Subject Area
+
+Business
+Associated Tasks
+
+Classification, Regression
+Feature Type
+
+Real
+# Instances
+
+4898
+# Features
+
+11
+Dataset Information
+
+Additional Information
+
+The two datasets are related to red and white variants of the Portuguese "Vinho Verde" wine. For more details, consult: http://www.vinhoverde.pt/en/ or the reference [Cortez et al., 2009].  Due to privacy and logistic issues, only physicochemical (inputs) and sensory (the output) variables are available (e.g. there is no data about grape types, wine brand, wine selling price, etc.).
+
+These datasets can be viewed as classification or regression tasks.  The classes are ordered and not balanced (e.g. there are many more normal wines than excellent or poor ones). Outlier detection algorithms could be used to detect the few excellent or poor wines. Also, we are not sure if all input variables are relevant. So it could be interesting to test feature selection methods.
+
+
+------------------------- DATASET SCHEMA -------------------------
+
+The data is a .csv file with schema
+
+Variable Name	Role	Type	Description	Units	Missing Values
+fixed_acidity	Feature	Continuous			no
+volatile_acidity	Feature	Continuous			no
+citric_acid	Feature	Continuous			no
+residual_sugar	Feature	Continuous			no
+chlorides	Feature	Continuous			no
+free_sulfur_dioxide	Feature	Continuous			no
+total_sulfur_dioxide	Feature	Continuous			no
+density	Feature	Continuous			no
+pH	Feature	Continuous			no
+sulphates	Feature	Continuous			no
+alcohol	Feature	Continuous			no
+quality	Target	Integer	score between 0 and 10		no
+color	Other	Categorical	red or white		no
+
+------------------------- PROJECT RUBRIC -------------------------
+
+Prompt 	Highest Scoring Option 	Points
+Submit Deliverable One: Jupyter Notebook or PDF Report 	Gives a clear explanation of what the project is about and clearly states both the type of learning/algorithms and type of task. 	3
+Project Topic Goal 	Very Good — clearly states the motivation or the goal for the project. 	2
+Data Source Citation 	Includes a brief explanation of where the data is from/how it was gathered and cites the dataset using a style manual like APA. 	2
+Data Description 	Describes the data including the data size appropriately for the type of data. 	4
+Data Cleaning 	Includes all three: clear explanations of how and why cleaning steps were performed, conclusions or discussions, and proper visualizations. 	10
+Exploratory Data Analysis 	EDA above and beyond expectations, including at least two: good analysis and conclusions/discussions, correlation matrix with analysis, or extra EDA. 	20
+Models 	Model section above and beyond expectations, including at least three advanced techniques (e.g., hyperparameter tuning, feature engineering). 	25
+Results and Analysis 	Results and analysis section goes above expectations, including a summary with basic results and analysis and three advanced visualizations or evaluations. 	25
+Discussion and Conclusion 	Discussion and conclusion section goes above expectations, including three discussions or takeaways. 	15
+Write-up Organization 	Yes, the write-up is organized and clear. 	5
+Submit Deliverable Two: Video Presentation 	Excellent presentation, including all required elements: problem solved, ML approach, and demo or results. 	10
+Video Clarity and Organization 	Presentation has very good clarity and organization, following a logical sequence and giving appropriate time to each section. 	5
+Submit Deliverable Three: GitHub Repository Link 	Yes, has a public GitHub repository with code specifically for this project. 	5
+Code Comments 	Yes, code includes comments that help understand the code. 	5
+Code Organization 	Yes, the file repository structure makes sense, and the code is easy to read and follow. 	5
+
+------------------------- TASK -------------------------
+
+write a python source file to be formatted as jupyter notebook
+by differentiating cells with "### CELL\n" delimiter
+file paths and other key constants should be variables
+
+the script should run a clustering algorithm to the dataset
+then it should greedily map cluster number to quality score by frequency in the training set.
+this model should be in a class
+the run analysis on the performance of the model with printing of confusion matrix
+
+the script should thoroughly address each part of rubric for highest score

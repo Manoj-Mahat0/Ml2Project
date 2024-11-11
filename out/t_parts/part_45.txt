@@ -1,0 +1,3 @@
+
+We initialize a Linear Regression model, train it on the training data, and evaluate it on the test data. After making predictions, we round them to the nearest integer to match the wine quality labels.
+

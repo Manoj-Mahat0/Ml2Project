@@ -1,0 +1,6 @@
+
+While the K-Means model was able to group wines into clusters, it struggled to provide accurate predictions for wine quality, likely because wine quality is a continuous variable. K-Means is better suited for tasks where categories are clearly defined, rather than predicting a continuous target like wine quality.
+
+
+It’s also worth mentioning the data preprocessing steps we performed. We used Standard Scaling to ensure the features were on a similar scale, which is essential for both clustering and regression models. The dataset was clean, with no missing values or significant outliers, which helped ensure the models received high-quality inputs.
+

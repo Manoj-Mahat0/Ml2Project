@@ -1,0 +1,28 @@
+# ### Set File Paths and Constants
+DATASET_PATH = '../data/winequality.csv'  # Path to the wine quality dataset
+TARGET_VARIABLE = 'quality'  # Target variable name
+FEATURES = [
+    'fixed_acidity', 'volatile_acidity', 'citric_acid',
+    'residual_sugar', 'chlorides', 'free_sulfur_dioxide',
+    'total_sulfur_dioxide', 'density', 'pH',
+    'sulphates', 'alcohol'
+]  # Features for clustering
+
+# ### Load the Dataset
+data = pd.read_csv(DATASET_PATH)
+
+# ### Data Overview
+print(f"Dataset contains {data.shape[0]} instances and {data.shape[1]} features.")
+print(f"Features: {data.columns.tolist()}")
+print(f"Missing values: \n{data.isnull().sum()}")
+
+EDIT THIS CELL:
+
+there are two files with the data
+
+'../data/winequality-red.csv'
+'../data/winequality-white.csv'
+
+and separator is ';'
+load these data and join into a resulting dataframe
+also have a column which stores whether it is red or white

@@ -1,0 +1,6 @@
+
+From the plots, we can observe that as the number of clusters increases, the accuracy on the training set improves, but the accuracy on the test set plateaus after a certain number of clusters. This suggests that adding more clusters may not significantly improve the model's ability to generalize to unseen data.
+
+
+Now, let's shift gears and compare the K-Means clustering approach with Linear Regression. Linear Regression is a supervised learning technique that directly models the relationship between features and the target variable—in this case, wine quality.
+

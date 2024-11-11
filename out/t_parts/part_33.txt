@@ -1,0 +1,6 @@
+
+
+
+
+In the first part of this analysis, we define a custom class called WineQualityClustering. This class uses the K-Means clustering algorithm to group wines into different clusters based on their physicochemical properties.
+

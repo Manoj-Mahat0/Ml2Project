@@ -1,0 +1,4 @@
+
+
+The training set consists of approximately 70% of the data, while 30% is reserved for testing. Let’s proceed to implement our clustering algorithms.
+

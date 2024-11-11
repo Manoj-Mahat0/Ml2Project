@@ -1,0 +1,5 @@
+
+
+
+Once the clustering is complete, we evaluate the models using accuracy and mean absolute error. These metrics help us understand how well the clusters align with the actual wine quality. Accuracy measures the proportion of correct predictions, while mean absolute error tells us the average difference between predicted and actual quality scores.
+

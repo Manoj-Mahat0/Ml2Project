@@ -1,0 +1,10 @@
+
+We track four key metrics:
+
+    Train Accuracy
+    Train MAE
+    Test Accuracy
+    Test MAE
+
+The results are then visualized through two plots: one showing Accuracy vs. Number of Clusters, and the other showing MAE vs. Number of Clusters.
+

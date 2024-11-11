@@ -1,0 +1,4 @@
+
+
+Additionally, we visualize the confusion matrix to further assess the performance of our clustering models. The confusion matrix shows the frequency of each predicted quality score versus the actual score, allowing us to see where the clustering model may be making errors.
+

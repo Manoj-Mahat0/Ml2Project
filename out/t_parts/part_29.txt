@@ -1,0 +1,5 @@
+
+
+
+Moving on to Linear Regression, we also aim to predict wine quality as a continuous variable. Unlike clustering, which groups wines into discrete categories, regression predicts specific quality scores.
+

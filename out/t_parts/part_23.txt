@@ -1,0 +1,4 @@
+
+
+After applying both algorithms, we will evaluate the cluster quality by comparing the predicted clusters with the actual quality ratings of the wines. This is where we introduce a label matching algorithm to determine the most accurate assignment of clusters to quality scores. We use a greedy matching technique that aligns the most frequent quality scores with the clusters.
+

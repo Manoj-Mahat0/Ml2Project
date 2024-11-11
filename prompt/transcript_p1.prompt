@@ -1,0 +1,532 @@
+write a transcript for a video presentation of the following jupyter notebook
+
+the resulting document must have the format:
+
+*text_segment 1 for presenter
+
+[Pause for x_1 seconds]
+
+...
+
+*text_segment n for presenter
+
+[Pause for x_n seconds]
+
+The content of the notebook is below.
+Be thorough in discussing the content.
+
+Wine Quality Prediction and Clustering Analysis
+Project Overview
+
+This project aims to analyze and predict the quality of wines based on various physicochemical properties. The dataset consists of red and white wine samples, with several features such as acidity, alcohol content, sugar levels, and pH, along with a target variable indicating the quality of each wine. The goal is to predict wine quality and identify patterns using clustering techniques.
+Type of Learning/Algorithm
+
+This project employs unsupervised learning for clustering analysis and supervised learning for regression tasks. The following algorithms are used in this analysis:
+
+    Clustering (Unsupervised Learning):
+        K-Means
+        Agglomerative Clustering
+
+    Regression (Supervised Learning):
+        Linear Regression
+
+Type of Task
+
+The task associated with this dataset involves predicting wine quality using the following approaches:
+
+    Clustering: Unsupervised learning models are used to group wines into clusters, and then the clusters are mapped to quality labels based on their most frequent quality scores.
+
+    Regression: A supervised learning approach using Linear Regression to predict continuous wine quality scores.
+
+Data Overview
+
+The dataset contains the following features related to the wine’s characteristics:
+
+    Fixed acidity
+    Volatile acidity
+    Citric acid
+    Residual sugar
+    Chlorides
+    Free sulfur dioxide
+    Total sulfur dioxide
+    Density
+    pH
+    Sulphates
+    Alcohol
+
+Additionally, there are two datasets: one for red wine and one for white wine, each containing a quality score that indicates the quality of the wine (integer values from 3 to 9).
+Data Cleaning
+
+    Missing values: None (the dataset is clean with no missing values).
+    Duplicates: Removed any duplicate records to ensure the integrity of the data.
+
+Citation
+
+    UCI Machine Learning Repository. (n.d.). Wine Quality Dataset. Retrieved from https://archive.ics.uci.edu/dataset/186/wine+quality
+
+# ### Import Necessary Libraries
+
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+from sklearn.cluster import KMeans, AgglomerativeClustering
+
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, mean_absolute_error
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.linear_model import LinearRegression
+
+import joblib
+
+# ### Set File Paths and Constants
+
+RED_WINE_PATH = '../data/winequality-red.csv'  # Path to the red wine quality dataset
+
+WHITE_WINE_PATH = '../data/winequality-white.csv'  # Path to the white wine quality dataset
+
+TARGET_VARIABLE = 'quality'  # Target variable name
+
+FEATURES = [
+
+    'fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar',
+
+    'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density',
+
+    'pH', 'sulphates', 'alcohol',
+
+    # 'quality', 'wine_type', 'wine_type_factor',
+
+] # Features for clustering
+
+# ### Load the Datasets
+
+red_wine_data = pd.read_csv(RED_WINE_PATH, sep=';')
+
+white_wine_data = pd.read_csv(WHITE_WINE_PATH, sep=';')
+
+​
+
+# Add a column to indicate the wine type
+
+red_wine_data['wine_type'] = 'red'
+
+white_wine_data['wine_type'] = 'white'
+
+​
+
+# Concatenate the datasets
+
+data = pd.concat([red_wine_data, white_wine_data], ignore_index=True)
+
+​
+
+# Adding factor for wine_type
+
+data['wine_type_factor'] = data['wine_type'].map({'white': 0, 'red': 1})
+
+data['wine_type_factor']
+
+​
+
+# ### Data Cleaning
+
+# Check for duplicates and drop if any
+
+data.drop_duplicates(inplace=True)
+
+​
+
+​
+
+# ### Data Overview
+
+print(f"Dataset shape: {data.shape} = (examples, features + target).")
+
+print(f"Features: {data.columns.tolist()}")
+
+print(f"Missing values: \n{data.isnull().sum()}")
+
+Dataset shape: (5320, 14) = (examples, features + target).
+Features: ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'quality', 'wine_type', 'wine_type_factor']
+Missing values:
+fixed acidity           0
+volatile acidity        0
+citric acid             0
+residual sugar          0
+chlorides               0
+free sulfur dioxide     0
+total sulfur dioxide    0
+density                 0
+pH                      0
+sulphates               0
+alcohol                 0
+quality                 0
+wine_type               0
+wine_type_factor        0
+dtype: int64
+
+# ### Print Data Types of Columns
+
+print(data.dtypes)
+
+​
+
+# ### Print Unique Values of Features
+
+print( "\nUnique Values of Features:\n", sorted(list(data[TARGET_VARIABLE].unique())) )
+
+fixed acidity           float64
+volatile acidity        float64
+citric acid             float64
+residual sugar          float64
+chlorides               float64
+free sulfur dioxide     float64
+total sulfur dioxide    float64
+density                 float64
+pH                      float64
+sulphates               float64
+alcohol                 float64
+quality                   int64
+wine_type                object
+wine_type_factor          int64
+dtype: object
+
+Unique Values of Features:
+ [3, 4, 5, 6, 7, 8, 9]
+
+I = FEATURES + [TARGET_VARIABLE]
+
+correlation_matrix = data[I].corr()
+
+​
+
+plt.figure(figsize=(12, 10))
+
+sns.heatmap(correlation_matrix, annot=True, fmt='.2f', cmap='coolwarm', square=True,
+
+            xticklabels=I, yticklabels=I)
+
+plt.title('Correlation Matrix')
+
+plt.show()
+
+# ### Exploratory Data Analysis (EDA)
+
+# Visualize the distribution of the target variable: wine quality
+
+plt.figure(figsize=(8, 5))
+
+sns.countplot(x=TARGET_VARIABLE, data=data)
+
+plt.title('Distribution of Wine Quality')
+
+plt.xlabel('Quality Score')
+
+plt.ylabel('Frequency')
+
+plt.xticks(rotation=0)
+
+plt.tight_layout()
+
+plt.show()
+
+Data Overview
+
+After loading and cleaning the datasets, we get the following summary:
+
+    Dataset Shape: The dataset contains 5320 rows (examples) and 13 columns (features including the target quality and the wine_type column).
+
+    Features: The dataset contains the following features:
+        'fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'quality', 'wine_type'.
+
+    Missing Values: There are no missing values in any of the columns, indicating a clean dataset ready for analysis.
+
+    Data Types: The columns have the following data types:
+        All feature columns are of type float64, except for the quality column (which is int64) and the wine_type column (which is object).
+
+    Unique Values in the Target Variable (quality): The unique values for wine quality range from 3 to 9.
+        We see that the wine quality has an almost normal distribution with mean rating of 6.
+
+# ### Count of Red vs White
+
+wine_counts = data['wine_type'].value_counts()
+
+print(wine_counts)
+
+​
+
+# ### Plotting
+
+plt.figure(figsize=(8, 5))
+
+wine_counts.plot(kind='bar')
+
+plt.title('Count of Red vs White Wines')
+
+plt.xlabel('Wine Type')
+
+plt.ylabel('Count')
+
+plt.xticks(rotation=0)
+
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+plt.show()
+
+​
+
+white    3961
+red      1359
+Name: wine_type, dtype: int64
+
+Distribution white vs. red wine
+
+    We see that there are 3961 white samples, 1359 red samples.
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.preprocessing import StandardScaler
+
+​
+
+# ### Prepare Data for the Clustering Algorithm
+
+# Split the dataset into training and testing sets
+
+X_train, X_test = train_test_split(data, test_size=0.3, random_state=42)
+
+​
+
+# apply standard scaling to features set
+
+scaler = StandardScaler()
+
+X_train.loc[:, FEATURES] = scaler.fit_transform(X_train.loc[:, FEATURES])
+
+X_test.loc[:, FEATURES] = scaler.transform(X_test.loc[:, FEATURES])
+
+​
+
+# Print the shape of the training and testing sets
+
+print(f"Training set shape: {X_train.shape}")
+
+print(f"Testing set shape: {X_test.shape}")
+
+​
+
+X_train.head()
+
+# X_train[FEATURES]
+
+Training set shape: (3724, 14)
+Testing set shape: (1596, 14)
+
+	fixed acidity 	volatile acidity 	citric acid 	residual sugar 	chlorides 	free sulfur dioxide 	total sulfur dioxide 	density 	pH 	sulphates 	alcohol 	quality 	wine_type 	wine_type_factor
+4683 	-0.458445 	-1.039481 	0.226768 	-0.549262 	-0.775769 	0.142201 	-0.651802 	-1.019137 	-0.030720 	1.342830 	0.626548 	6 	white 	0
+2007 	-0.691225 	-1.218694 	0.497500 	-0.857809 	-0.354036 	-0.241993 	0.013879 	-0.838475 	0.217301 	0.006309 	-0.215335 	6 	white 	0
+6097 	-0.303258 	-0.860268 	-0.450064 	0.244143 	-0.113045 	-0.461532 	-0.161300 	-0.336638 	-0.836786 	0.076652 	0.205606 	5 	white 	0
+5962 	-0.070478 	-0.203154 	-0.450064 	1.346094 	-0.233540 	0.087316 	0.364238 	0.710529 	-0.526760 	-0.908153 	-0.888841 	5 	white 	0
+494 	-0.536039 	0.274747 	-0.585430 	0.706962 	-0.143169 	-0.132223 	-0.424069 	0.232111 	1.333393 	0.146995 	1.300053 	6 	red 	1
+
+import itertools
+
+import numpy as np
+
+from sklearn.metrics import accuracy_score
+
+import heapq
+
+​
+
+def compute_cluster_options(df, cluster_col, target_col):
+
+    """
+
+    Compute cluster options based on the DataFrame.
+
+​
+
+    df: DataFrame containing the clusters and true labels
+
+    cluster_col: column name for cluster labels
+
+    target_col: column name for true labels
+
+​
+
+    Returns a dictionary where keys are cluster labels and values are lists of possible true labels.
+
+    """
+
+    cluster_options = {}
+
+​
+
+    # Group by cluster labels and collect unique target labels
+
+    for cluster, group in df.groupby(cluster_col):
+
+        # print(cluster, group)
+
+        # unique_labels = group[target_col].unique()
+
+        unique_labels, unique_counts = np.unique(group[target_col], return_counts=True)
+
+        cluster_options[int(cluster)] = sorted(
+
+            list(zip(unique_labels, unique_counts)), key=lambda x: -x[1]
+
+        )
+
+​
+
+    return cluster_options
+
+​
+
+​
+
+def label_permute_compare(y_labels, clusters, cluster_options):
+
+    """
+
+    y_labels: labels dataframe object
+
+    clusters: clustering label prediction output
+
+    cluster_options: (cluster) => list( label, count in cluster ) as seen in training data
+
+    Returns the best permuted label order and its corresponding accuracy.
+
+    Example output: ({3: 0, 4: 1, 1: 2, 2: 3}, 0.74)
+
+    """
+
+    y_np_labels = y_labels.to_numpy().flatten()
+
+​
+
+    # Get unique true labels and their counts
+
+    true_labels, true_counts = np.unique(y_np_labels, return_counts=True)
+
+    f_map = {
+
+        value : count
+
+        for (value, count) in zip(true_labels, true_counts)
+
+    }
+
+​
+
+    # Get unique predicted labels and their counts
+
+    pred_labels, pred_counts = np.unique(clusters, return_counts=True)
+
+    cluster_counts = {
+
+        value : count
+
+        for (value, count) in zip(pred_labels, pred_counts)
+
+    }
+
+    # print(cluster_options)
+
+    assert sum(pred_counts) == sum(true_counts)
+
+​
+
+    # Generate permutations of the predicted labels
+
+    best_accuracy = 0
+
+    best_mapping = {}
+
+​
+
+    # Greedy matching algorithm,
+
+    for (cluster, label_counts) in cluster_options.items():
+
+        best_mapping[cluster] = label_counts[0][0]
+
+        best_accuracy += label_counts[0][1]
+
+​
+
+    best_accuracy /= len(y_np_labels)
+
+    # print(f_map, best_mapping, best_accuracy)
+
+    return best_mapping, best_accuracy
+
+​
+
+def evaluate_model(y_true, y_pred, model_name='', display=True):
+
+    # Calculate metrics
+
+    accuracy = accuracy_score(y_true, y_pred)
+
+    mae = mean_absolute_error(y_true, y_pred)
+
+    pct_error = (mae / np.mean(y_true)) * 100 if np.mean(y_true) != 0 else None  # Avoid division by zero
+
+    conf_matrix = confusion_matrix(y_true, y_pred)
+
+​
+
+    if display:
+
+        # Print metrics
+
+        print(f"Evaluation Results for: {model_name}")
+
+        print(f"Accuracy: {accuracy:.4f}")
+
+        print(f"Mean Absolute Error: {mae:.4f}")
+
+        print(f"Percentage Error: {pct_error:.2f}%")
+
+​
+
+​
+
+        # Plot confusion matrix
+
+        plt.figure(figsize=(8, 6))
+
+        sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
+
+                    xticklabels=np.unique(y_true),
+
+                    yticklabels=np.unique(y_true))
+
+        plt.title(f'Confusion Matrix: {model_name}')
+
+        plt.xlabel('Predicted Quality')
+
+        plt.ylabel('Actual Quality')
+
+        plt.show()
+
+
+
+    return {
+
+        "accuracy" : accuracy,
+
+        "mae" : mae,
+
+        "pct_error" : pct_error,
+
+    }

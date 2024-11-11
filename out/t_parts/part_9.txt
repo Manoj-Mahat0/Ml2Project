@@ -1,0 +1,5 @@
+
+
+
+Next, we’ll look at some exploratory data analysis, starting with the distribution of the wine quality scores. When visualizing this, we see that the wine quality ratings are relatively evenly distributed, with the most frequent ratings being in the middle of the scale, typically around a quality score of 6.
+

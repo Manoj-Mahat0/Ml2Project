@@ -1,0 +1,217 @@
+
+Welcome to this presentation on wine quality prediction and clustering analysis.
+The aim of this project is to analyze and predict the quality of wines using several physicochemical properties.
+We will be working with a dataset containing both red and white wines, featuring attributes such as acidity, alcohol content, sugar levels, pH, and more.
+The primary objective is to predict wine quality and identify patterns through clustering techniques.
+
+[Pause for 2 seconds]
+
+This analysis uses both unsupervised learning for clustering and supervised learning for regression tasks.
+We will utilize the K-Means Clustering algorithms for clustering, and Linear Regression to predict continuous quality scores.
+
+[Pause for 2 seconds]
+
+
+Let's take a closer look at the dataset itself.
+The dataset consists of several features related to the wine’s physicochemical properties.
+These include:
+
+    Fixed acidity
+    Volatile acidity
+    Citric acid
+    Residual sugar
+    Chlorides
+    Free sulfur dioxide
+    Total sulfur dioxide
+    Density
+    pH
+    Sulphates
+    Alcohol
+
+Additionally, there is a target variable called quality, which is an integer representing the wine quality score ranging from 3 to 9.
+
+[Pause for 2 seconds]
+
+The dataset contains both red and white wines.
+We load the red and white wines data from the respective file paths using the pd.read_csv method.
+Then we concatenate the red and white wine data into a variable named data.
+
+From there, we’ll look at some exploratory data analysis.
+
+After loading the data, we observe that it contains no missing values using the .isnull() method.
+
+We also see that all the features are correctly typed using the .unique() method.
+
+Next, we look at the correlation matrix of the features.
+The features appear to be relatively uncorrelated, with the exception of similarly named features.
+
+[Pause for 2 seconds]
+
+
+Now, let's look at the distribution of the wine quality scores.
+When visualizing this, we see that the wine quality ratings appear to be normally distributed with a mean of 6.
+
+[Pause for 2 seconds]
+
+Another interesting point is that the dataset contains both red and white wines, and we can see the count of each type using a bar chart.
+As we can see from the plot, there are considerably more white wine samples compared to red wines.
+
+[Pause for 2 seconds]
+
+
+With the data cleaned and explored, we now move on to the clustering analysis.
+Clustering is an unsupervised learning method that allows us to group wines based on their characteristics.
+
+[Pause for 2 seconds]
+
+To prepare for clustering, we split the data into training and testing sets.
+We also apply Standard Scaling to normalize the features, ensuring that each feature contributes equally to the clustering models.
+This step is essential because the clustering algorithms, like K-Means, are sensitive to the scale of the features.
+
+[Pause for 2 seconds]
+
+The training set consists of approximately 70% of the data, while 30% is reserved for testing.
+Let’s proceed to implement our clustering algorithms.
+
+[Pause for 2 seconds]
+
+
+We’ll begin by applying a clustering algorithm: K-Means Clustering.
+Both of these methods will help us group the wines into different clusters based on their characteristics.
+
+[Pause for 2 seconds]
+
+K-Means clustering is an iterative algorithm that groups data into a predefined number of clusters.
+These methods will allow us to see how wines naturally group together based on their features.
+
+[Pause for 2 seconds]
+
+After applying both algorithms, we will evaluate the cluster quality by comparing the predicted clusters with the actual quality ratings of the wines.
+This is where we introduce a label matching algorithm to determine the most accurate assignment of clusters to quality scores.
+We use a greedy matching technique that aligns the most frequent quality scores with the clusters.
+
+[Pause for 2 seconds]
+
+
+Once the clustering is complete, we evaluate the models using accuracy and mean absolute error.
+These metrics help us understand how well the clusters align with the actual wine quality.
+Accuracy measures the proportion of correct predictions, while mean absolute error tells us the average difference between predicted and actual quality scores.
+
+[Pause for 2 seconds]
+
+Additionally, we visualize the confusion matrix to further assess the performance of our clustering models.
+The confusion matrix shows the frequency of each predicted quality score versus the actual score, allowing us to see where the clustering model may be making errors.
+
+[Pause for 2 seconds]
+
+
+In the first part of this analysis, we define a custom class called WineQualityClustering.
+This class uses the K-Means clustering algorithm to group wines into different clusters based on their physicochemical properties.
+
+[Pause for 2 seconds]
+The WineQualityClustering class has three key methods:
+
+    The fit method trains the K-Means model and assigns a cluster to each wine sample.
+    The predict method predicts the cluster for new, unseen data.
+    The evaluate method evaluates the clustering model’s performance using metrics like accuracy and Mean Absolute Error (MAE).
+
+[Pause for 2 seconds]
+The fit method also includes a process where we compare the predicted clusters to the actual quality labels and create the best possible mapping between them using a function called label_permute_compare.
+
+
+Now, let’s move on to the first part of the experiment, where we initialize the WineQualityClustering class with 100 clusters, fit the model to the training data, and evaluate its performance on both the training and testing datasets.
+
+[Pause for 2 seconds]
+Here are the evaluation results for K-Means with 100 clusters:
+
+    Accuracy: 52.32%
+    Mean Absolute Error (MAE): 0.5426
+    Percentage Error: 9.37%
+
+These results show that the model’s accuracy and MAE are reasonable, but there's still room for improvement.
+The evaluation metrics give us insight into how well the predicted clusters match the actual quality labels.
+
+
+Next, we explore how the number of clusters impacts the model's performance.
+To do this, we loop over a range of cluster sizes, from 100 to 500, and evaluate the model for each number of clusters.
+
+[Pause for 2 seconds]
+We track four key metrics:
+
+    Train Accuracy
+    Train MAE
+    Test Accuracy
+    Test MAE
+
+The results are then visualized through two plots: one showing Accuracy vs.
+Number of Clusters, and the other showing MAE vs.
+Number of Clusters.
+
+[Pause for 2 seconds]
+From the plots, we can observe that as the number of clusters increases, the accuracy on the training set improves, but the accuracy on the test set plateaus after a certain number of clusters.
+This suggests that adding more clusters may not significantly improve the model's ability to generalize to unseen data.
+
+
+Now, let's shift gears and compare the K-Means clustering approach with Linear Regression.
+Linear Regression is a supervised learning technique that directly models the relationship between features and the target variable—in this case, wine quality.
+Unlike clustering, which groups wines into discrete categories, regression predicts specific quality scores,
+  so we'll see if classifying as a continuous variable improves performance.
+
+[Pause for 2 seconds]
+
+We’ll train the regression model on the same features used in clustering, and then assess its performance using metrics such as mean absolute error and accuracy.
+The goal here is to understand how well our model can predict wine quality based on the physicochemical attributes of each sample.
+
+[Pause for 2 seconds]
+
+
+
+[Pause for 2 seconds]
+We initialize a Linear Regression model, train it on the training data, and evaluate it on the test data.
+After making predictions, we round them to the nearest integer to match the wine quality labels.
+
+[Pause for 2 seconds]
+The evaluation results for the Linear Regression model are as follows:
+
+    Accuracy: 53.26%
+    Mean Absolute Error (MAE): 0.5201
+    Percentage Error: 8.98%
+
+When compared to K-Means clustering, Linear Regression performs slightly better in terms of both accuracy and MAE, indicating that it’s a more effective model for predicting continuous wine quality scores.
+
+
+Let’s now summarize the results of our comparison.
+
+    K-Means Clustering (with 100 clusters) achieved an accuracy of 52.32% and an MAE of 0.5426.
+    Linear Regression outperformed K-Means with an accuracy of 53.26% and an MAE of 0.5201.
+
+[Pause for 2 seconds]
+While the K-Means model was able to group wines into clusters, it struggled to provide accurate predictions for wine quality, likely because wine quality is a continuous variable.
+K-Means is better suited for tasks where categories are clearly defined, rather than predicting a continuous target like wine quality.
+
+
+It’s also worth mentioning the data preprocessing steps we performed.
+We used Standard Scaling to ensure the features were on a similar scale, which is essential for both clustering and regression models.
+The dataset was clean, with no missing values or significant outliers, which helped ensure the models received high-quality inputs.
+
+[Pause for 2 seconds]
+However, there’s always room for improvement in data preprocessing.
+For instance, we could explore feature engineering to create new variables or remove features that don’t contribute meaningfully to the model.
+Additionally, we could handle imbalanced classes if needed, although the wine quality variable appeared fairly balanced.
+
+
+Looking forward, there are several avenues for further work.
+For example, we could experiment with more complex models, such as deep learning techniques, which might better capture the intricate relationships between features and wine quality.
+
+[Pause for 2 seconds]
+We could also try adding more features to the dataset, such as factors related to the wine’s region or vintage year, which could improve model performance.
+Finally, hyperparameter tuning for both the K-Means and Linear Regression models could lead to better results.
+
+
+To conclude, our experiment has shown that Linear Regression is more effective than K-Means Clustering for predicting wine quality, given that wine quality is a continuous variable.
+Although K-Means is a popular unsupervised learning technique, it doesn’t perform as well in this context, where we need to predict a continuous score.
+
+[Pause for 2 seconds]
+Thank you for following along in this analysis.
+We’ve seen how different machine learning models can be used for wine quality prediction, and how fine-tuning them can lead to better results.
+Stay tuned for future improvements as we continue to explore new techniques and data sources!

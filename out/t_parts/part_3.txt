@@ -1,0 +1,4 @@
+
+
+This analysis uses both unsupervised learning for clustering and supervised learning for regression tasks. We will utilize the K-Means Clustering algorithms for clustering, and Linear Regression to predict continuous quality scores.
+

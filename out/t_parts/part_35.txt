@@ -1,0 +1,7 @@
+
+The WineQualityClustering class has three key methods:
+
+    The fit method trains the K-Means model and assigns a cluster to each wine sample.
+    The predict method predicts the cluster for new, unseen data.
+    The evaluate method evaluates the clustering model’s performance using metrics like accuracy and Mean Absolute Error (MAE).
+

@@ -1,0 +1,5 @@
+
+
+
+We’ll begin by applying a clustering algorithm: K-Means Clustering. Both of these methods will help us group the wines into different clusters based on their characteristics.
+

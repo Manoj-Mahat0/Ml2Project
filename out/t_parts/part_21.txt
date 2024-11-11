@@ -1,0 +1,4 @@
+
+
+K-Means clustering is an iterative algorithm that groups data into a predefined number of clusters. These methods will allow us to see how wines naturally group together based on their features.
+

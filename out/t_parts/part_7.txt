@@ -1,0 +1,4 @@
+
+
+The dataset contains both red and white wines. After loading the data, we observe that it is clean, with no missing values and no duplicates. In fact, all the features are non-null and correctly typed. The target variable, quality, contains integer values from 3 to 9. We will also note that the dataset is well-balanced, with 3961 white wine samples and 1359 red wine samples.
+
